@@ -120,8 +120,8 @@
 
 Number of best raid times to seek:               3
 Guild activities reset time for results:     18:30
-Best times weights list:                 10000, -1000
-Acceptable times weights list:            1000,  -100
+Best times weights list:                 10000, 10
+Acceptable times weights list:            1000,  1
 
 
 # Members preferences below:
@@ -131,6 +131,3 @@ P1, reset(18:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
 P2, reset(12:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
 P3, reset(10:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
 P4, reset (8:30), best(19,20,21,22,0,1), acceptable(2,12,13,23,19,20)
-#x,y(ala) , w (aha x y z), bry(ała)
-#x,y(ala) , w (aha) x y z, bry(ała) x y z 
-#x,y(苺ましまろ) , w (aha) x y z, bry(苺ましまろ) x y z 

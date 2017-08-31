@@ -1,0 +1,136 @@
+################################################################################
+# Lines starting with # will be ignored and can be used for comments
+################################################################################
+
+
+################################################################################
+# Player prefences
+################################################################################
+#
+# Eeach guild member shall provide one line entry in following format:
+# Guild Member Name,reset(HH:30),best(HH,HH,HH),acceptable(HH,HH,HH)
+# where in parens each member shall put:
+# reset      --- guild activities reset in his local time (see below for
+#                explanation why reset must be 30 minutes after full hour)
+# best       --- list of full hours in member local time which would be best
+#                starting time of raid for him
+# acceptable --- list of full hours in member local time which are acceptable
+#                but not optimal for this member
+#
+# Example:
+# Eliza Mol,reset(23:30),best(19,20,21,22,23,1),acceptable(2,12,13)
+#
+################################################################################
+
+
+################################################################################
+# Best raid times calculation
+################################################################################
+#
+# We ask each player to provide 2 sets of hours, the "best" and "acceptable"
+# set and using this data we look for solutions wich have best value for the
+# whole guild. The value for whole guild is calculated as sum of values for each
+# player. For each player we consider how many hours from his best set and
+# from his acceptable set were included.
+#
+# Each included hour can have different value. First included hour will take
+# first value from the list, second included hour will take second value from
+# list, and so on... Note that
+# * If there were 2 hours from best set and 1 hour from acceptable set, then the
+#   hour from acceptable set is in fact 3rd included hour, so it takes value
+#   from 3rd position of acceptable times weigths list
+# * If there are not enough values in weights list last one will be reused.
+#
+#
+# Example
+# In 3 person guild we are looking for 3 best times
+# We compare only 2 solutions for simplicity
+
+# Lets assume following weights:
+#
+# Best times weights list:      1024, 64, 1
+# Acceptable times weights list: 256, 16, 0
+# 
+#                +----------------------------+-------------------+
+#                | Solution 1                 | Solution 2        |
+#                |                            |                   |
+# +--------------+----------------------------+-------------------+
+# | Player1      | 1 best time           1024 | 1 best time  1024 |
+# |              | 1 acceptable            16 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | Player2      | 2 best times       1024+64 | 1 best time  1024 |
+# |              | 1 acceptable             0 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | Player3      | 0 best times             0 | 1 best time  1024 |
+# |              | 3 acceptable        256+16 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | Sum          |                       2400 |              3072 |
+# +--------------+----------------------------+-------------------+
+#
+# Solution 2 wins above, but if we change weigths we can change winner:
+#
+# Best times weights list:      1024
+# Acceptable times weights list: 512
+# 
+#                +----------------------------+-------------------+
+#                | Solution 1                 | Solution 2        |
+#                |                            |                   |
+# +--------------+----------------------------+-------------------+
+# | player1      | 1 best time           1024 | 1 best time  1024 |
+# |              | 1 acceptable           512 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | player2      | 2 best times     1024+1024 | 1 best time  1024 |
+# |              | 0 acceptable             0 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | player3      | 0 best times             0 | 1 best time  1024 |
+# |              | 3 acceptable   512+512+512 | 0 acceptable    0 |
+# +--------------+----------------------------+-------------------+
+# | Sum          |                       4608 |              3072 |
+# +--------------+----------------------------+-------------------+
+#
+################################################################################
+
+
+################################################################################
+# Player vs. guild time zones
+################################################################################
+# 
+# We use guild activities reset time as reference for timezons because guilds
+# can be created in different timezones, and players can be in different
+# timezones. We are not interested in exact time zone name of everybody, only
+# abtout relations between local timezones of players and of the guild. As
+# everybody can easily check in game at what time is guild activity reset,
+# using it will limit errors due to time conversions done by humans.
+#
+# We currently support only guilds and players in typical timezones (whole
+# hours difference from UTC), hence guild activities reset time must be exactly
+# 30 minutes after full hour. If member is e.g. in Indian timezone and guild 
+# activities reset time occurs at full hour for him, then he needs to
+# lie about the time of guild activity reset and pretend that he is in
+# different time zone --- sorry ;-)
+#
+################################################################################
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
+Number of best raid times to seek:               3
+Guild activities reset time for results:     18:30
+Best times weights list:                 10000, -1000
+Acceptable times weights list:            1000,  -100
+
+
+# Members preferences below:
+
+Eliza Mol, reset(23:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
+P1, reset(18:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
+P2, reset(12:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
+P3, reset(10:30), best(19,20,21,22,0,1), acceptable(2,12,13,23)
+P4, reset (8:30), best(19,20,21,22,0,1), acceptable(2,12,13,23,19,20)
+#x,y(ala) , w (aha x y z), bry(ała)
+#x,y(ala) , w (aha) x y z, bry(ała) x y z 
+#x,y(苺ましまろ) , w (aha) x y z, bry(苺ましまろ) x y z 

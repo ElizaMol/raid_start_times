@@ -891,6 +891,14 @@ void calculate_results(const config_header& header, const std::vector<player>& p
 	}
 }
 
+void remove_bom(std::string& line)
+{
+	if (line[0] == '\xef' && line[1] == '\xbb' && line[2] == '\xbf')
+	{
+		line = line.substr(3);
+	}
+}
+
 int main()
 {
 	std::vector<player> players;
@@ -902,6 +910,7 @@ int main()
 	{
 		while (header.parsed() == false && std::getline(std::cin, line).good())
 		{
+			remove_bom(line);
 			++line_no;
 			if (is_comment(line))
 			{
@@ -917,6 +926,7 @@ int main()
 
 		while (std::getline(std::cin, line).good())
 		{
+			remove_bom(line);
 			++line_no;
 			if (is_comment(line))
 			{

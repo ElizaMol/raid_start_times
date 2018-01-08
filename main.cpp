@@ -408,7 +408,7 @@ struct config_header_parser : config_header
 		}
 		else
 		{
-			throw parse_error(0, "Unrecognized header line, we expect one of:\n" + 
+			throw parse_error(0, "Unrecognized header line, we expect one of:\n" +
 					raid_times_label + "\n" +
 					guild_reset_label + "\n" +
 					best_weights_label + "\n" +
